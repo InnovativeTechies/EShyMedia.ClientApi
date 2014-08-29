@@ -17,7 +17,7 @@ Add EShyMedia.ClientApi.SimpleRestClient to your Core project (or wherever you i
 Install-Package EShyMedia.ClientApi.SimpleRestClient
 ```
 
-In your UI projects, add the ModernHttpClient plugin
+In your UI projects, add the [ModernHttpClient plugin](https://github.com/Cheesebaron/Cheesebaron.MvxPlugins)
 ```
 Install-Package EShyMedia.MvvmCross.Plugins.ModernHttpClient
 ```
