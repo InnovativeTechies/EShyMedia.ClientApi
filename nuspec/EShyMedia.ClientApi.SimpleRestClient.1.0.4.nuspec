@@ -1,21 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>EShyMedia.ClientApi.SimpleRestClient</id>
-        <version>1.0.0</version>
+        <version>1.0.4</version>
         <title>EShyMedia.ClientApi.SimpleRestClient</title>
         <authors>Ishai Hachlili</authors>
         <owners>Ishai Hachlili</owners>
-        <projectUrl>https://github.com/Cheesebaron/Cheesebaron.MvxPlugins</projectUrl>
+        <projectUrl>https://github.com/eshy/EShyMedia.ClientApi</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A simple REST client for MvvmCross clients</description>
+        <releaseNotes>Added AddAuthorizationHeader extension method and removed the security paramters from MakeRequestAsync</releaseNotes>
         <tags>MvvmCross REST ModernHttpClient</tags>
         <dependencies>
-            <group>
-                <dependency id="Microsoft.Net.Http" version="2.2.22" />
-                <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.1.1" />
-                <dependency id="EShyMedia.MvvmCross.Plugins.ModernHttpClient" version="1.0.2" />
-            </group>
+            <dependency id="Microsoft.Net.Http" version="2.2.22" />
+            <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.1.1" />
+            <dependency id="EShyMedia.MvvmCross.Plugins.ModernHttpClient" version="1.0.2" />
         </dependencies>
     </metadata>
     <files>

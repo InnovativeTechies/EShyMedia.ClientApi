@@ -5,6 +5,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
         Body,
         QueryString,
         UrlSegment,
-        Header
+        Header,
+        Authorization
     }
 }

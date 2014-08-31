@@ -19,5 +19,12 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             return parameters;
         }
 
+        public static RestParameters AddAuthorizationHeader(this RestParameters parameters, string securityMethod,
+            string securityToken)
+        {
+            //TODO: If there's already an authorization param, replace it
+            parameters.AddParameter(securityMethod, securityToken, RestParameterTypes.Authorization);
+            return parameters;
+        }
     }
 }

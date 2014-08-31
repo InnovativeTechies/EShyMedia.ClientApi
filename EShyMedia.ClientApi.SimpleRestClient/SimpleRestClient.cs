@@ -47,7 +47,6 @@ namespace EShyMedia.ClientApi.SimpleRestClient
         #region public methods
 
         public async Task<TResult> MakeRequestAsync<TResult>(string resource, HttpMethod methodType,
-            string securityMethod,string securityToken, 
             RestParameters parameters, int retries = 3, CancellationTokenSource token = null)
         {
             Mvx.TaggedTrace("RestClient", "MakeRequestAsync - Start - {0})", resource);
@@ -68,9 +67,11 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             client.BaseAddress = new Uri(BaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
 
-            if (!String.IsNullOrWhiteSpace(securityToken))
+            //Add Authorization
+            var authorizationParam = allParams.FirstOrDefault(p => p.ParameterType == RestParameterTypes.Authorization);
+            if (authorizationParam != null)
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(String.IsNullOrWhiteSpace(securityMethod) ? "OAuth" : securityMethod, securityToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authorizationParam.Name, authorizationParam.Value.ToString());
             }
 
             var request = new HttpRequestMessage(methodType, relativeAddress);
@@ -96,10 +97,6 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                 request.Headers.Add(p.Name, p.Value.ToString());
             }
             
-            //request.Headers.Add("Platform", Platform.ToString());
-
-            //request.Headers.Add("ClientVersion", ClientVersion.ToString());
-
             //Make Request
             Mvx.TaggedTrace("RestClient", "MakeRequestAsync - Request - {0}", request.RequestUri.ToString());
             var result = await client.SendAsync(request, _currentToken.Token);
@@ -133,7 +130,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                     }
                     catch (Exception ex)
                     {
-                        throw new EndpointNotFoundException(request.RequestUri.ToString());
+                        throw new EndpointNotFoundException(request.RequestUri.ToString(), ex);
                     }
                 case HttpStatusCode.NotFound:
                     throw new EndpointNotFoundException(request.RequestUri.ToString());
@@ -151,8 +148,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             }
         }
 
-        public async Task<Stream> GetStreamAsync(string url, string securityMethod, string securityToken,
-            RestParameters parameters)
+        public async Task<Stream> GetStreamAsync(string url, RestParameters parameters)
         {
             var handler = _httpClientFactory.GetHandler();
             var outerHandler = new RetryHandler(handler, 3);
