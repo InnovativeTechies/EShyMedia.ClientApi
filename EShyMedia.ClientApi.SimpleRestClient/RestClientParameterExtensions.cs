@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace EShyMedia.ClientApi.SimpleRestClient
 {
@@ -25,6 +26,15 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             //TODO: If there's already an authorization param, replace it
             parameters.AddParameter(securityMethod, securityToken, RestParameterTypes.Authorization);
             return parameters;
+        }
+
+        public static RestParameters AddBasicAuthorization(this RestParameters parameters, string userName,
+            string password)
+        {
+            var encoding = Encoding.GetEncoding("iso-8859-1");
+            var userPass = String.Format("{0}:{1}", userName, password);
+            var encoded = Convert.ToBase64String(encoding.GetBytes(userPass));
+            return parameters.AddAuthorizationHeader("Basic", encoded);
         }
     }
 }
