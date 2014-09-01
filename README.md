@@ -50,9 +50,8 @@ public class SampleService:ISampleService
         parameters.AddParameter("size", pageSize);
 
         //Make the request (this request will be a GET on http://yourapibaseurl.com/Products?page=n1&size=n2)
-        //Use SecurityMethod, SecurityToken to add an Authorization header (you can also add an authorization header to the Parameters collection)
         //Retries defines the number of attempts in case a call fails before giving up
-        var result = await _simpleRestClient.MakeRequestAsync<List<Product>>("Products", HttpMethod.Get, SecurityMethod, SecurityToken, parameters, Retries);
+        var result = await _simpleRestClient.MakeRequestAsync<List<Product>>("Products", HttpMethod.Get, parameters, Retries);
 
         return result;
     }
@@ -62,8 +61,7 @@ public class SampleService:ISampleService
         var parameters = new RestParameters();
         parameters.AddUrlSegment("productId", productId);
 
-        var result = await _simpleRestClient.MakeRequestAsync<Product>("Products/{productId}", HttpMethod.Get,
-                    SecurityMethod, SecurityToken, parameters);
+        var result = await _simpleRestClient.MakeRequestAsync<Product>("Products/{productId}", HttpMethod.Get, parameters);
 
         return result;
     }
@@ -75,7 +73,7 @@ public class SampleService:ISampleService
 
         var result =
             await
-                _simpleRestClient.MakeRequestAsync<Product>("Products", HttpMethod.Post, SecurityMethod, SecurityToken, parameters, 1);
+                _simpleRestClient.MakeRequestAsync<Product>("Products", HttpMethod.Post, parameters, 1);
 
         return result;    
     }
