@@ -24,6 +24,12 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             string securityToken)
         {
             //TODO: If there's already an authorization param, replace it
+
+            if (String.IsNullOrWhiteSpace(securityMethod) || String.IsNullOrWhiteSpace(securityToken))
+            {
+                //Can't add authorization with no token
+                return parameters;
+            }
             parameters.AddParameter(securityMethod, securityToken, RestParameterTypes.Authorization);
             return parameters;
         }

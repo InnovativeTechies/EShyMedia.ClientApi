@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>EShyMedia.ClientApi.SimpleRestClient</id>
-        <version>1.0.4</version>
+        <version>1.0.6</version>
         <title>EShyMedia.ClientApi.SimpleRestClient</title>
         <authors>Ishai Hachlili</authors>
         <owners>Ishai Hachlili</owners>
         <projectUrl>https://github.com/eshy/EShyMedia.ClientApi</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A simple REST client for MvvmCross clients</description>
-        <releaseNotes>Added AddAuthorizationHeader extension method and removed the security paramters from MakeRequestAsync</releaseNotes>
+        <releaseNotes>Added AddAuthorizationHeader and AddBasicAuthorization extension methods and removed the security paramters from MakeRequestAsync</releaseNotes>
         <tags>MvvmCross REST ModernHttpClient</tags>
         <dependencies>
             <dependency id="Microsoft.Net.Http" version="2.2.22" />
