@@ -5,25 +5,25 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Cheesebaron.MvxPlugins.ModernHttpClient;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
+using EShyMedia.ClientApi.SimpleRestClient.Exceptions;
 
 namespace EShyMedia.ClientApi.SimpleRestClient
 {
     public class SimpleRestClient : ISimpleRestClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IModernHttpClient _modernHttpClient;
         private readonly IMvxJsonConverter _jsonConverter;
         private CancellationTokenSource _currentToken;
 
-        public SimpleRestClient(IHttpClientFactory httpClientFactory, IMvxJsonConverter jsonConverter)
+        public SimpleRestClient(IModernHttpClient modernHttpClient, IMvxJsonConverter jsonConverter)
         {
-            _httpClientFactory = httpClientFactory;
+            _modernHttpClient = modernHttpClient;
             _jsonConverter = jsonConverter;
             if (String.IsNullOrWhiteSpace(MediaType))
                 MediaType = "application/json";
@@ -53,9 +53,9 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 
             _currentToken = token ?? new CancellationTokenSource();
 
-            var handler = _httpClientFactory.GetHandler();
+            var handler = _modernHttpClient.GetNativeHandler();
             var outerHandler = new RetryHandler(handler, retries);
-            var client = _httpClientFactory.Get(outerHandler);
+            var client = _modernHttpClient.Get(outerHandler);
 
             var allParams = new RestParameters();
             allParams.AddRange(DefaultParameters);
@@ -107,7 +107,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                 case HttpStatusCode.Forbidden:
                 case HttpStatusCode.Unauthorized:
                     result.Dispose();
-                    throw new UnauthorizedAccessException(request.RequestUri.ToString());
+                    throw new UnAuthorizedException(request.RequestUri.ToString());
                 case HttpStatusCode.InternalServerError:
                 case HttpStatusCode.BadRequest:
                     try
@@ -115,11 +115,11 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                         //Error message might be in the content, try to get it and pass it up to the caller
                         var content = await result.Content.ReadAsStringAsync();
                         result.Dispose();
-                        throw new ProtocolException(content);
+                        throw new BadRequestException(content);
                     }
                     catch (Exception ex)
                     {
-                        throw new ProtocolException(ex.Message);
+                        throw new BadRequestException(ex.Message);
                     }
                 case HttpStatusCode.NotAcceptable:
                     try
@@ -130,12 +130,12 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                     }
                     catch (Exception ex)
                     {
-                        throw new EndpointNotFoundException(request.RequestUri.ToString(), ex);
+                        throw new NotFoundException(request.RequestUri.ToString(), ex);
                     }
                 case HttpStatusCode.NotFound:
-                    throw new EndpointNotFoundException(request.RequestUri.ToString());
+                    throw new NotFoundException(request.RequestUri.ToString());
                 case HttpStatusCode.NoContent:
-                    throw new ProtocolException("NoContent");
+                    throw new NoContentException("NoContent");
                 case HttpStatusCode.Accepted:
                 case HttpStatusCode.Created:
                 case HttpStatusCode.OK:
@@ -144,15 +144,15 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                     return Deserialize<TResult>(contents);
                 default:
                     result.Dispose();
-                    throw new Exception(request.RequestUri.ToString());
+                    throw new NetworkException(request.RequestUri.ToString());
             }
         }
 
         public async Task<Stream> GetStreamAsync(string url, RestParameters parameters)
         {
-            var handler = _httpClientFactory.GetHandler();
+            var handler = _modernHttpClient.GetNativeHandler();
             var outerHandler = new RetryHandler(handler, 3);
-            var client = _httpClientFactory.Get(outerHandler);
+            var client = _modernHttpClient.Get(outerHandler);
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
@@ -164,7 +164,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 
                 return result;
             }
-            catch (EndpointNotFoundException)
+            catch (NotFoundException)
             {
 
             }

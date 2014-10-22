@@ -1,1 +1,1 @@
-nuget push EShyMedia.MvvmCross.Plugins.DeviceInfo.1.0.0.nupkg
+nuget push EShyMedia.ClientApi.SimpleRestClient.2.0.0.nupkg
