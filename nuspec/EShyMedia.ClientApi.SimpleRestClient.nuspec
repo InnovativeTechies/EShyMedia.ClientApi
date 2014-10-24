@@ -13,11 +13,12 @@
         <tags>MvvmCross REST ModernHttpClient</tags>
         <dependencies>
             <dependency id="Microsoft.Net.Http" version="2.2.22" />
+            <dependency id="Newtonsoft.Json" version="6.0.5" />
             <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.2.1" />
-            <dependency id="EShyMedia.MvvmCross.Plugins.ModernHttpClient" version="2.0.0" />
+            <dependency id="Cheesebaron.MvxPlugins.ModernHttpClient" version="2.0.0" />
         </dependencies>
     </metadata>
     <files>
-        <file src="..\Release\Portable\EShyMedia.ClientApi.SimpleRestClient.dll" target="lib\portable-win+net45+wp8+MonoAndroid+MonoTouch\EShyMedia.ClientApi.SimpleRestClient.dll" />
+        <file src="..\Release\Portable\EShyMedia.ClientApi.SimpleRestClient.dll" target="lib\portable-win+net45+wp8+win8+wpa81+MonoTouch+MonoAndroid\EShyMedia.ClientApi.SimpleRestClient.dll" />
     </files>
 </package>
