@@ -47,7 +47,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
         #region public methods
 
         public async Task<TResult> MakeRequestAsync<TResult>(string resource, HttpMethod methodType,
-            RestParameters parameters, int retries = 3, CancellationTokenSource token = null)
+            RestParameters parameters, int retries = 3, CancellationTokenSource token = null, string mediaType=null)
         {
             Mvx.TaggedTrace("RestClient", "MakeRequestAsync - Start - {0})", resource);
 
@@ -65,7 +65,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             var relativeAddress = BuildUri(BaseUrl, resource, allParams);
 
             client.BaseAddress = new Uri(BaseUrl);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(String.IsNullOrWhiteSpace(mediaType) ? MediaType : mediaType));
 
             //Add Authorization
             var authorizationParam = allParams.FirstOrDefault(p => p.ParameterType == RestParameterTypes.Authorization);

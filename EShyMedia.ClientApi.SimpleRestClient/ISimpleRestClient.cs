@@ -20,7 +20,7 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 
         //Methods
 
-        Task<TResult> MakeRequestAsync<TResult>(string resource, HttpMethod methodType, RestParameters parameters, int retries=3, CancellationTokenSource token = null);
+        Task<TResult> MakeRequestAsync<TResult>(string resource, HttpMethod methodType, RestParameters parameters, int retries=3, CancellationTokenSource token = null, string mediaType=null);
     
         Task<Stream> GetStreamAsync(string url, RestParameters parameters);
 
