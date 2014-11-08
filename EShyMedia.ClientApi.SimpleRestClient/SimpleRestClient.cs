@@ -65,7 +65,8 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             var relativeAddress = BuildUri(BaseUrl, resource, allParams);
 
             client.BaseAddress = new Uri(BaseUrl);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(String.IsNullOrWhiteSpace(mediaType) ? MediaType : mediaType));
+            var requestMediaType = String.IsNullOrWhiteSpace(mediaType) ? MediaType : mediaType;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(requestMediaType));
 
             //Add Authorization
             var authorizationParam = allParams.FirstOrDefault(p => p.ParameterType == RestParameterTypes.Authorization);
@@ -86,8 +87,8 @@ namespace EShyMedia.ClientApi.SimpleRestClient
                 }
                 else
                 {
-                    var serialized = Serialize(bodyParam.Value);
-                    request.Content = new StringContent(serialized, Encoding.UTF8, MediaType);
+                    var serialized = Serialize(bodyParam.Value, requestMediaType);
+                    request.Content = new StringContent(serialized, Encoding.UTF8, requestMediaType);
                 }
             }
 
@@ -248,15 +249,41 @@ namespace EShyMedia.ClientApi.SimpleRestClient
         }
 
         //TODO: Use Media Type to choose serialization method
-        private string Serialize(object toSerialize)
+        private string Serialize(object toSerialize, string mediaType)
         {
-            return _jsonConverter.SerializeObject(toSerialize);
+            if (mediaType.ToLower().EndsWith("json"))
+            {
+                return _jsonConverter.SerializeObject(toSerialize);
+            }
+            
+            if (mediaType.ToLower().EndsWith("x-www-form-urlencoded"))
+            {
+                return SerializeToFormEncodedString(_jsonConverter.SerializeObject(toSerialize));
+            }
+
+            return toSerialize.ToString();
         }
+
         private T Deserialize<T>(string responseBody)
         {
             var toReturn = _jsonConverter.DeserializeObject<T>(responseBody);
             return toReturn;
-        }        
+        }
+
+        private string SerializeToFormEncodedString(string json)
+        {
+            var dict = _jsonConverter.DeserializeObject<Dictionary<string, string>>(json);
+
+            var sb = new StringBuilder();
+            foreach (var kvp in dict.Where(kvp => !string.IsNullOrEmpty(kvp.Key) && !string.IsNullOrEmpty(kvp.Value)))
+            {
+                if (sb.Length > 0) sb.Append('&');
+                sb.Append(kvp.Key.UrlEncode());
+                sb.Append('=');
+                sb.Append(kvp.Value.UrlEncode());
+            }
+            return sb.ToString();
+        }
 
         #endregion
 

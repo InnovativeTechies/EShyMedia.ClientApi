@@ -42,5 +42,11 @@ namespace EShyMedia.ClientApi.SimpleRestClient
             var encoded = Convert.ToBase64String(encoding.GetBytes(userPass));
             return parameters.AddAuthorizationHeader("Basic", encoded);
         }
+
+        //public static RestParameters AddOAuth2PasswordGrant(this RestParameters parameters, string userName,
+        //    string password, string clientId)
+        //{
+        //    {"grant_type" = ""}
+        //}
     }
 }
