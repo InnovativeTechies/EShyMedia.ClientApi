@@ -2,20 +2,19 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>EShyMedia.ClientApi.SimpleRestClient</id>
-        <version>2.0.2</version>
+        <version>3.0.0</version>
         <title>EShyMedia.ClientApi.SimpleRestClient</title>
         <authors>Ishai Hachlili</authors>
         <owners>Ishai Hachlili</owners>
         <projectUrl>https://github.com/eshy/EShyMedia.ClientApi</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A simple REST client for MvvmCross clients</description>
-        <releaseNotes>Added temporary solution form form encoded serialization</releaseNotes>
+        <releaseNotes>No longer using ModernHttpClient</releaseNotes>
         <tags>MvvmCross REST ModernHttpClient</tags>
         <dependencies>
             <dependency id="Microsoft.Net.Http" version="2.2.22" />
             <dependency id="Newtonsoft.Json" version="6.0.5" />
             <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.2.1" />
-            <dependency id="Cheesebaron.MvxPlugins.ModernHttpClient" version="2.0.0" />
         </dependencies>
     </metadata>
     <files>

@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Cheesebaron.MvxPlugins.ModernHttpClient;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
 using EShyMedia.ClientApi.SimpleRestClient.Exceptions;
@@ -17,13 +16,11 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 {
     public class SimpleRestClient : ISimpleRestClient
     {
-        private readonly IModernHttpClient _modernHttpClient;
         private readonly IMvxJsonConverter _jsonConverter;
         private CancellationTokenSource _currentToken;
 
-        public SimpleRestClient(IModernHttpClient modernHttpClient, IMvxJsonConverter jsonConverter)
+        public SimpleRestClient(IMvxJsonConverter jsonConverter)
         {
-            _modernHttpClient = modernHttpClient;
             _jsonConverter = jsonConverter;
             if (String.IsNullOrWhiteSpace(MediaType))
                 MediaType = "application/json";
@@ -53,9 +50,11 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 
             _currentToken = token ?? new CancellationTokenSource();
 
-            var handler = _modernHttpClient.GetNativeHandler();
-            var outerHandler = new RetryHandler(handler, retries);
-            var client = _modernHttpClient.Get(outerHandler);
+            //var handler = _modernHttpClient.GetNativeHandler();
+            //var outerHandler = new RetryHandler(handler, retries);
+            //var client = _modernHttpClient.Get(outerHandler);
+
+            var client = new HttpClient();
 
             var allParams = new RestParameters();
             allParams.AddRange(DefaultParameters);
@@ -151,9 +150,10 @@ namespace EShyMedia.ClientApi.SimpleRestClient
 
         public async Task<Stream> GetStreamAsync(string url, RestParameters parameters)
         {
-            var handler = _modernHttpClient.GetNativeHandler();
-            var outerHandler = new RetryHandler(handler, 3);
-            var client = _modernHttpClient.Get(outerHandler);
+            //var handler = _modernHttpClient.GetNativeHandler();
+            //var outerHandler = new RetryHandler(handler, 3);
+            //var client = _modernHttpClient.Get(outerHandler);
+            var client = new HttpClient();
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
