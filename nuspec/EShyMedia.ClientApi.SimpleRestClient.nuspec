@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>EShyMedia.ClientApi.SimpleRestClient</id>
-        <version>3.5.0-beta2</version>
+        <version>3.5.0</version>
         <title>EShyMedia.ClientApi.SimpleRestClient</title>
         <authors>Ishai Hachlili</authors>
         <owners>Ishai Hachlili</owners>
@@ -14,7 +14,7 @@
         <dependencies>
             <dependency id="Microsoft.Net.Http" version="2.2.22" />
             <dependency id="Newtonsoft.Json" version="6.0.5" />
-            <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.5.0-beta2" />
+            <dependency id="MvvmCross.HotTuna.Plugin.Json" version="3.5.0" />
         </dependencies>
     </metadata>
     <files>
